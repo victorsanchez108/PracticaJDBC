@@ -97,9 +97,54 @@ public class GestorProyectos {
         return 0;
     }
 
-    public void asignaEmpAproyecto() {
+    public boolean asignaEmpAproyecto(Statement s) {
+        try {
+            Scanner sc = new Scanner(System.in);
 
+            // Obtener la lista de empleados
+            ResultSet rsEmpleados = s.executeQuery("SELECT DNI_NIF, NOMBRE FROM EMPLEADOSVICTOR");
+            System.out.println("Lista de Empleados:");
+            while (rsEmpleados.next()) {
+                System.out.println(rsEmpleados.getString("DNI_NIF") + " - " + rsEmpleados.getString("NOMBRE"));
+            }
 
+            // Solicitar al usuario que elija un empleado
+            System.out.print("Selecciona el DNI_NIF del empleado: ");
+            String dniEmpleado = sc.nextLine();
 
+            // Obtener la lista de proyectos
+            ResultSet rsProyectos = s.executeQuery("SELECT NUM_PROY, NOMBRE FROM PROYECTOSVICTOR");
+            System.out.println("Lista de Proyectos:");
+            while (rsProyectos.next()) {
+                System.out.println(rsProyectos.getInt("NUM_PROY") + " - " + rsProyectos.getString("NOMBRE"));
+            }
+
+            // Solicitar al usuario que elija un proyecto
+            System.out.print("Selecciona el NUM_PROY del proyecto: ");
+            int numProyecto = sc.nextInt();
+            sc.nextLine();  // Consumir la nueva línea pendiente
+
+            // Solicitar las fechas de inicio y fin
+            System.out.print("Introduce la fecha de inicio (YYYY-MM-DD): ");
+            String fechaInicio = sc.nextLine();
+            System.out.print("Introduce la fecha de fin (YYYY-MM-DD): ");
+            String fechaFin = sc.nextLine();
+
+            // Insertar la asignación en la tabla ASIG_PROYECTOSVICTOR
+            String query2 = "INSERT INTO CLIENTESVICTOREJ6 (DNI,APELLIDOS,CP) VALUES (?,?,?)";
+            String query = "INSERT INTO ASIG_PROYECTOSVICTOR (DNI_NIF_EMP, NUM_PROY, F_INICIO, F_FIN) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement ps = s.getConnection().prepareStatement(query)) {
+                ps.setString(1, dniEmpleado);
+                ps.setInt(2, numProyecto);
+                ps.setString(3, fechaInicio);
+                ps.setString(4, fechaFin);
+
+                int rowsAffected = ps.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

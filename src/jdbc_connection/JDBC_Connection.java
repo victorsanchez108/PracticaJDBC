@@ -57,6 +57,8 @@ public class JDBC_Connection {
             datosejer3(s); // añadimos los datos que se nos piden para hacer los siguientes ejercicios
             ResultSet rs3 = s.executeQuery("SELECT NUM_PROY FROM PROYECTOSVICTOR");
             ejercicio3(s, rs3);
+            System.out.println("--------------------------------------EJERCICIO 6--------------------------------------");
+            ejercicio6(s,sc,c);
             rs.close();
             s.close();
             c.close();
@@ -194,7 +196,7 @@ public class JDBC_Connection {
             //apartadoB
             gs.nuevoproyecto(s, rs3);
             //apartadoC
-            gs.asignaEmpAproyecto();
+            gs.asignaEmpAproyecto(s);
 
 
         } catch (Exception e) {
@@ -213,6 +215,38 @@ public class JDBC_Connection {
                     "PRIMARY KEY(DNI_NIF_EMP, NUM_PROY, F_INICIO), " +
                     "FOREIGN KEY F_ASIG_EMP(DNI_NIF_EMP) REFERENCES EMPLEADOSVICTOR (DNI_NIF)," +
                     "FOREIGN KEY F_ASIG_PROY(NUM_PROY) REFERENCES PROYECTOSVICTOR (NUM_PROY));");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void ejercicio6(Statement s,Scanner sc,Connection c) {
+        try {
+            LectorDatosClientes ld = new LectorDatosClientes();
+            String nombreTabla;
+            String nombreFichero, separadorCampos = "";
+            int separadorNum;
+            System.out.println("Que nombre le damos a la tabla ?");
+            nombreTabla = sc.nextLine();
+           String sql = "CREATE TABLE IF NOT EXISTS " + nombreTabla + " (DNI CHAR(9) NOT NULL, " + "APELLIDOS VARCHAR(32) NOT NULL, CP CHAR(5), " + "PRIMARY KEY(DNI));";
+
+            s.executeUpdate(sql);
+            System.out.println("Que nombre le damos al fichero csv?");
+            nombreFichero = sc.nextLine();
+
+            do {
+                System.out.println("que separador de campos quieres, 1--> ; o 2 --> |");
+                separadorNum = sc.nextInt();
+                if (separadorNum == 1){
+                    separadorCampos = ";";
+                }else if (separadorNum == 2){
+                    separadorCampos = "|";
+                }else {
+                    System.out.println("has elegido mal");
+                }
+            }while (separadorNum!= 1 && separadorNum!= 2);
+           ld.sertaDatosClientes(nombreFichero,  nombreTabla,  separadorCampos,  sc, s,c);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
