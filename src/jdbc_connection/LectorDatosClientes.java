@@ -7,6 +7,10 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.Scanner;
 public class LectorDatosClientes {
+
+
+
+
     public void sertaDatosClientes(String nombreFichero, String nombreTabla, String separadorCampos, Scanner sc, Statement s, Connection c){
         int para = 0;
         String DNI,APELLIDOS,CP;
@@ -65,6 +69,28 @@ public class LectorDatosClientes {
 
         }while (para!=7);
 
+
+    }
+    public void testej7(Statement s,String nombreTabla){
+
+
+        String query = "INSERT INTO " + nombreTabla + " (DNI,APELLIDOS,CP) VALUES (?,?,?)";
+        try(PreparedStatement ps = s.getConnection().prepareStatement(query)) {
+            String DNI = null;
+
+            ps.setString(1, DNI);
+            System.out.println("Apellido");
+          String  APELLIDOS = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            ps.setString(2, APELLIDOS);
+            System.out.println("CP");
+            String CP = "Sssssssssssssssssssssssssssssssss";
+            ps.setString(3, CP);
+            System.out.println("Introducidos Correctamente");
+            ps.executeUpdate();
+        }catch (SQLException e) {
+            //e.
+            //System.out.println("El DNI no puede ser Nulo");
+        }
 
     }
 }

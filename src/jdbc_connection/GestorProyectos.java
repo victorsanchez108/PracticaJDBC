@@ -131,7 +131,7 @@ public class GestorProyectos {
             String fechaFin = sc.nextLine();
 
             // Insertar la asignación en la tabla ASIG_PROYECTOSVICTOR
-            String query2 = "INSERT INTO CLIENTESVICTOREJ6 (DNI,APELLIDOS,CP) VALUES (?,?,?)";
+            //String query2 = "INSERT INTO CLIENTESVICTOREJ6 (DNI,APELLIDOS,CP) VALUES (?,?,?)";
             String query = "INSERT INTO ASIG_PROYECTOSVICTOR (DNI_NIF_EMP, NUM_PROY, F_INICIO, F_FIN) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = s.getConnection().prepareStatement(query)) {
                 ps.setString(1, dniEmpleado);
